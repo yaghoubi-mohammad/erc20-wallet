@@ -23,7 +23,7 @@ export async function POST(request: Request) {
         message: "Error fetching wallet balance",
         error: (error as Error).message,
       },
-      { status: 500 }
+      { status: 500 }  
     );
-  }
+  } 
 }
