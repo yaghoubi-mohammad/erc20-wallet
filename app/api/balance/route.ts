@@ -13,17 +13,24 @@ export async function POST(request: Request) {
       );
     }
 
-    const infuraUrl = process.env.INFURA_URL || ""; // آدرس Infura از فایل .env
+    // دریافت آدرس Infura از متغیر محیطی
+    const infuraUrl = process.env.INFURA_URL;
+
+    if (!infuraUrl) {
+      return NextResponse.json(
+        { message: "INFURA_URL is not configured" },
+        { status: 500 }
+      );
+    }
+
     const balance = await getWalletBalance(walletAddress, infuraUrl);
 
     return NextResponse.json({ balance });
   } catch (error) {
+    console.error("Error in API:", error);
     return NextResponse.json(
-      {
-        message: "Error fetching wallet balance",
-        error: (error as Error).message,
-      },
-      { status: 500 }  
+      { message: "Error fetching wallet balance", error: (error as Error).message },
+      { status: 500 }
     );
-  } 
+  }
 }
