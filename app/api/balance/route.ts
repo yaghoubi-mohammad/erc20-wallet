@@ -1,20 +1,35 @@
 import { NextResponse } from "next/server";
-import { getTokenBalance } from "@/utils/ethersHelper";
+import { getWalletBalance } from "@/utils/ethersHelper";
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const { walletAddress, tokenAddress } = body;
-
-  if (!walletAddress || !tokenAddress) {
-    return NextResponse.json({ message: "Missing parameters" }, { status: 400 });
-  }
-
   try {
-    const balance = await getTokenBalance(walletAddress, tokenAddress);
+    const body = await request.json();
+    const { walletAddress } = body;
+
+    if (!walletAddress) {
+      return NextResponse.json(
+        { message: "Wallet address is required" },
+        { status: 400 }
+      );
+    }
+
+    // دریافت آدرس Infura از متغیر محیطی
+    const infuraUrl = process.env.INFURA_URL;
+
+    if (!infuraUrl) {
+      return NextResponse.json(
+        { message: "INFURA_URL is not configured" },
+        { status: 500 }
+      );
+    }
+
+    const balance = await getWalletBalance(walletAddress, infuraUrl);
+
     return NextResponse.json({ balance });
   } catch (error) {
+    console.error("Error in API:", error);
     return NextResponse.json(
-      { message: "Error fetching balance", error: (error as Error).message },
+      { message: "Error fetching wallet balance", error: (error as Error).message },
       { status: 500 }
     );
   }
