@@ -13,7 +13,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // دریافت آدرس Infura از متغیر محیطی
     const infuraUrl = process.env.INFURA_URL;
 
     if (!infuraUrl) {

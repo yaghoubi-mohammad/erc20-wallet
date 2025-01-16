@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 interface EthGetBalanceResponse {
   jsonrpc: string;
   id: number;
-  result: string; // موجودی به صورت هگزادسیمال
+  result: string; 
 }
 
 export const getWalletBalance = async (
@@ -26,9 +26,9 @@ export const getWalletBalance = async (
 
     const data = (await response.json()) as EthGetBalanceResponse;
 
-    // تبدیل موجودی از هگزادسیمال به دسیمال
-    const balanceInWei = parseInt(data.result, 16); // موجودی به واحد Wei
-    const balanceInEther = balanceInWei / 10 ** 18; // تبدیل به Ether
+  
+    const balanceInWei = parseInt(data.result, 16); 
+    const balanceInEther = balanceInWei / 10 ** 18; 
     return balanceInEther;
   } catch (error) {
     console.error("Error fetching wallet balance:", error);
